@@ -289,3 +289,4 @@ D:\vs_mvc\InventoryProject\bin\Debug\net7.0\runtimes\win-arm\native\e_sqlite3.dl
 D:\vs_mvc\InventoryProject\bin\Debug\net7.0\runtimes\win-arm64\native\e_sqlite3.dll
 D:\vs_mvc\InventoryProject\bin\Debug\net7.0\runtimes\win-x64\native\e_sqlite3.dll
 D:\vs_mvc\InventoryProject\bin\Debug\net7.0\runtimes\win-x86\native\e_sqlite3.dll
+D:\vs_mvc\InventoryProject\obj\Debug\net7.0\InventoryProject.sourcelink.json

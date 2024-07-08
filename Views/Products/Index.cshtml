@@ -7,12 +7,58 @@
 <h1>All Product</h1>
 
 
-                        @if (User.IsInRole("Admin"))
-                        {
-<p>
-    <a asp-action="Create" class="btn btn-success">Create New</a>
-</p>
-                        }
+@if (User.IsInRole("Admin"))
+{
+    <p>
+        <div class="row">
+            <div class="col-2">
+            <a asp-action="Create" class="btn btn-success">Create New</a>
+            </div>
+            <div class="col-2">
+            <a class="btn btn-warning" id="Bulk_button">Discount In Bulk</a>
+            </div>
+            <div class="col-2 offset-6">
+            <form asp-action="Search" method="post">
+
+                <div class="form-group">
+                    
+                    <input type="text" class="form-control" id="productName" name="productName" placeholder="Enter text">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+            </div> 
+
+        </div>
+        
+        <form asp-action="BulkDiscount">
+        <div id="bulk_div" style="display:none;">
+            <div>
+                <label>
+                    <input type="radio" checked="checked" name="selectedOption" value="byamount" onclick="showHideDiv(this)"> Change By Amount
+                </label>
+                <label>
+                    <input type="radio" name="selectedOption" value="bypercentage" onclick="showHideDiv(this)"> Change By Percentage
+                </label>
+                <input type="hidden" id="selectedOption" value="" />
+            </div>
+            <div class="row">
+            <div class="col-2">
+            <label class="control-label">Enter Value</label>
+            <input type="number" name="new_val" class="form-control" />
+            </div>
+            <div class="col-3" >
+                        <input type="submit" value="Update" class="btn btn-success  btn-block" style="margin-top:23px;" />
+          
+            </div>
+            </div>
+        </div>
+        </form>
+
+        
+
+    </p>                      
+}
 <table class="table">
     <thead>
         <tr>
@@ -62,3 +108,16 @@
 }
     </tbody>
 </table>
+@section Scripts {
+   
+    <script>
+        $(document).ready(function () {
+
+            $("#Bulk_button").click(function () {
+                $("#bulk_div").show();
+            });
+           
+        });
+    </script>
+
+}

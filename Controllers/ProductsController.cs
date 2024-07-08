@@ -74,7 +74,7 @@ namespace InventoryProject.Controllers
             {
                 return NotFound();
             }
-
+       
             var product = await _context.products.FindAsync(id);
             if (product == null)
             {
@@ -88,7 +88,7 @@ namespace InventoryProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,Name,Description,Price,CreatedDate")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductId,Name,Description,Price,CreatedDate,Percentage_change")] Product product)
         {
             if (id != product.ProductId)
             {
@@ -99,6 +99,18 @@ namespace InventoryProject.Controllers
             {
                 try
                 {
+                    string a = Request.Form["selectedOption"].ToString();
+                    if (a == "bypercentage")
+                    {
+                        decimal val1 = Convert.ToDecimal(Request.Form["Percentage_change"]);
+                        decimal val2 = product.Price- (product.Price * val1 / 100);
+                        product.Price = Convert.ToInt32(val2);
+                    }
+                    else if (a == "byamount")
+                    {
+                       
+                    }
+                    
                     _context.Update(product);
                     await _context.SaveChangesAsync();
                 }
@@ -159,5 +171,78 @@ namespace InventoryProject.Controllers
         {
           return (_context.products?.Any(e => e.ProductId == id)).GetValueOrDefault();
         }
+
+
+        //public async Task AdjustProductPrice(int id, decimal adjustment, bool isPercentage)
+        //{
+        //    var product = await _context.products.FindAsync(id);
+        //    if (product == null) return;
+
+        //    if (isPercentage)
+        //    {
+        //        product.Price -= product.Price * (adjustment / 100);
+        //    }
+        //    else
+        //    {
+        //        product.Price -= adjustment;
+        //    }
+
+        //    if (product.Price < 0)
+        //    {
+        //        product.Price = 0;
+        //    }
+
+        //    _context.Products.Update(product);
+        //    await _context.SaveChangesAsync();
+        //}
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> BulkDiscount()
+        {
+            string a = Request.Form["selectedOption"].ToString();
+            int newPrice = Convert.ToInt32(Request.Form["new_val"]);
+            if (ModelState.IsValid)
+            {
+
+                var products = await _context.products.ToListAsync();  
+
+                foreach (var product in products)
+                {
+                    if (a == "bypercentage")
+                    {
+                       
+                        decimal val = product.Price - (product.Price * newPrice / 100);
+                        product.Price = Convert.ToInt32(val);
+                    }
+                    else if (a == "byamount")
+                    {
+                        product.Price = product.Price - newPrice;
+                    }
+
+                      
+                    _context.Update(product);
+                }
+
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Index));  
+            }         
+            return View(newPrice);
+        }
+
+
+        public async Task<IActionResult> Search(string productName)
+        {
+            var products = await _context.products
+                                    .Where(p => string.IsNullOrEmpty(productName) || p.Name.Contains(productName))
+                                    .ToListAsync();
+
+            return View("Index", products);
+        }
+
+
     }
 }

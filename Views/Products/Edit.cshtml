@@ -23,6 +23,29 @@
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
+
+
+            <div>
+                <label>
+                    <input type="radio" checked="checked" name="selectedOption" value="byamount" onclick="showHideDiv(this)"> Change By Amount
+                </label>
+                <label>
+                    <input type="radio" name="selectedOption" value="bypercentage" onclick="showHideDiv(this)"> Change By Percentage
+                </label>
+            </div>
+            <input type="hidden" id="selectedOption"  value="" />
+
+            <div id="divToShow" style="display:none">
+
+                <div class="form-group">
+                    <label  class="control-label">Enter Percentage</label>
+                    <input type="number" name="Percentage_change" class="form-control" />
+                   
+                </div>
+
+            </div>
+
+
             <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
                 <input asp-for="Price" class="form-control" />
@@ -38,6 +61,7 @@
                 <input type="submit" value="Save" class="btn btn-primary  btn-block" />
             </div>
         </form>
+
     </div>
 </div>
 <br />
@@ -46,5 +70,26 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        function showHideDiv(radio) {
+
+           // debugger;
+            var selectedOption = radio.value;
+            var hiddenInput = document.getElementById('selectedOption');
+            hiddenInput.value = selectedOption;
+
+            var divToShow = document.getElementById('divToShow');
+            
+            if (selectedOption == 'bypercentage') {
+                divToShow.style.display = 'block';
+            } else {
+                divToShow.style.display = 'none';
+            }
+        }
+    </script>
+
 }

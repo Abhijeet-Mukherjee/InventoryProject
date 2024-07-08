@@ -16,5 +16,8 @@ namespace InventoryProject.Data
         public DbSet<Product> products { get; set; }
 
         public DbSet<Inventory> inventory { get; set; }
+
+        public DbSet<Sale> Sales { get; set; }
+
     }
 }

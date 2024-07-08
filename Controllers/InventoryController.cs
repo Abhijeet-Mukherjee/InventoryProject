@@ -61,14 +61,27 @@ namespace InventoryProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(inventory);
+
+                var existingInventory = await _context.inventory.FirstOrDefaultAsync(inv => inv.ProductId == inventory.ProductId);
+                if (existingInventory != null)
+                {
+                    existingInventory.Quantity += inventory.Quantity;
+                }
+                else
+                {
+                    _context.Add(inventory);
+                }
+
+                
                 await _context.SaveChangesAsync();
+                
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ProductId"] = new SelectList(_context.products, "ProductId", "ProductId", inventory.ProductId);
             return View(inventory);
         }
 
+        
         // GET: Inventorie/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {

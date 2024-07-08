@@ -1,5 +1,6 @@
 using AspnetIdentityRoleBasedTutorial.Data;
 using InventoryProject.Data;
+using InventoryProject.services;
 using InvertoryProject.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,9 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultUI()
     .AddDefaultTokenProviders();
+
+ builder.Services.AddScoped<IProductService, ProductService>();
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
